@@ -167,17 +167,30 @@ and yields an iterator that, when used as a destination, appends values to the c
 		算法 <-------> 迭代器 <-------> 容器(元素)
 
 
-#ch7 关联容器（associative containers）
+#ch7 关联容器（associative containers） -- 提供高效的 look-up 操作
 1. associative container. Such
 containers automatically arrange their elements into a sequence that depends on the values
 of the elements themselves, rather than the sequence in which we inserted them. Moreover,
 associative containers exploit this ordering to let us locate particular elements much more
 quickly than do the sequential containers, without our having to keep the container ordered by
 ourselves.
-	关联容器有自动排序功能，能够提供高效的 loop-up 操作。
+	关联容器有自动排序功能，能够提供高效的 look-up 操作。
 2. 关联容器通过 key(关键字) 进行高效的查找操作。
 3. 一般的关联数据结构使用 key-value pairs。
 4. When we put a particular key-value pair into the data structure, that key will
 continue to be associated with the same value until we delete the pair. Such a data structure
 is called an associative array(关联数组）。如 map 。
+
+5. map<string, int> counters：That element is
+value-initialized, which, for simple types such as int , is equivalent to setting the value to zero.
+第一次值为0。
+	counters[s]：其中 s 为 key，获取的是key关联的数据，在这里是 int。
+6. The map container lets us do so by using a companion library type called *pair* .
+7. A pair is a simple data structure that holds two elements, which are named first and second .
+Each element in a map is really a pair , with a first member that contains the key and a
+second member that contains the associated value. When we dereference a map iterator, we
+obtain a value that is of the pair type associated with the map .
+map中存放的实际是一系列的 pair 类型，当我们对map中的迭代器截解引用时，实际上获得的是 pair类型的数据。
+8. key 总是 const 的。如对 map<string, int> 的迭代器解引用，实际上得到的是 pair<const string, int>。
+
 
