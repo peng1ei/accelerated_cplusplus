@@ -109,11 +109,22 @@ efficient implementation.
 6. 迭代器的操作 - Iterator operations
 - iter != students.end() // compare 操作
 - ++iter // 自增操作，迭代器指向下一个元素
-- (*iter).name // dereference 解引用，访问迭代器所在位置的元素
+- (*iter).name // dereference 解引用，访问迭代器所在位置的元素*
 - iter->name // 迭代器可以作为指向元素的指针
 
 7. 有些容器(container)支持 random-access indexing，有些容器不支持 random-access indexing。
 即 students.begin() + i，其中i为整数，则有些容器支持 + 操作，则有些容器不支持 + 操作，只支持顺序访问。
 
+8. vector 支持 index操作，而 list 不支持 index操作。
+9. vector使用迭代器删除元素时，则迭代器对后续的元素会失效，因为后续元素会前移；对于 list，使用迭代器删除元素时，迭代器不会失效，对后续的元素还有效？
+10. 不能使用通用的 sort 对list排序，list有自己的排序成员函数 sort。
+11. erase删除迭代器指定的元素，并返回删除元素的下一个迭代器。
+
+## string
+1. string 也可以看做一个容器，只是里面只存放字符，许多操作类似于vector，如支持index访问，支持迭代器访问
+2. substr(index, length) 截取字符串
+3. sting提供 getline() 函数，该函数有两个参数，一个是获取源，一个是存放获取字符串的地方，如 getline(cin, adderss)，返回获取源，如返回cin，所以可以使用返回值做条件测试语句，遇到行尾时则为false。
+
+12. <cctype>里面包含了一些处理 单个字符 的函数，第一个c表示c++从c中继承过来,如函数 isspace() 就是判断字符是否为空白字符（包含tab、space、\n等）。
 
 
