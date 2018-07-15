@@ -125,6 +125,59 @@ efficient implementation.
 2. substr(index, length) 截取字符串
 3. sting提供 getline() 函数，该函数有两个参数，一个是获取源，一个是存放获取字符串的地方，如 getline(cin, adderss)，返回获取源，如返回cin，所以可以使用返回值做条件测试语句，遇到行尾时则为false。
 
+4. string str = string(i, j); // i, j 为某个容器的迭代器，截取 [i, j)位置的字符串
+
 12. <cctype>里面包含了一些处理 单个字符 的函数，第一个c表示c++从c中继承过来,如函数 isspace() 就是判断字符是否为空白字符（包含tab、space、\n等）。
 
+13. 顺序容器（sequence）：vector、list、string
+
+#ch6 标准算法库 <algorithm>
+1. copy http://www.cplusplus.com/reference/algorithm/copy/
+2. find_if http://www.cplusplus.com/reference/algorithm/find_if/
+3. 迭代器适配器：back_inserter http://www.cplusplus.com/reference/iterator/back_inserter/?kw=back_inserter
+4. * 作为解引用时，其优先级和自增操作符 ++ 相同，且结合方向都是从右到左，所以以下表达式：
+	while (begin != end) // 其中begin和end均为迭代器
+		*out++ = *begin++; // out为迭代器
+
+	则 *out++ 实际上为 *(out++) -> {*out; out++;}，所以:
+		*out++ = *begin++ 等价于 { *out = *begin; ++out; ++begin; }
+	it = begin++; 等价于 it = begin; ++begin;
+
+5. 迭代器适配器（iterator adaptors）：
+Let's return to iterator adaptors, which are functions that yield iterators with properties that
+are related to their arguments in useful ways. The iterator adaptors are defined in <iterator> .
+The most common iterator adaptor is back_inserter , which takes a container as its argument
+and yields an iterator that, when used as a destination, appends values to the container.
+
+6. 回文（palindrome）数：如 1234321、 1234432`；回文单词：如 civic、eye、madam、rotor。即正读反读都可以。
+	如何判断一个 word 为回文单词?
+	bool is_palindrome(const string &s) {
+		return equal(s.begin(), s.end(), s.rbegin()); // 使用STL标准库里的算法
+	}
+	
+	如何判断一个 number 为回文数？(先将 number 转换为 string，然后再调用 is_palindrome 函数)
+	bool is_palindrome(int num) {
+		string str = std::to_string(num); // to_string 在 <string>中
+		return is_palindrome(str);
+	}
+
+7. find：如果查找失败，通常返回第二个参数（迭代器）
+8. Algorithms act on container elements—they do not act on containers.
+	算法作用于容器元素，而不作用于容器。而连接算法和容器元素的正是迭代器这个东西。因此可以说迭代器起了一个桥梁的作用。
+		算法 <-------> 迭代器 <-------> 容器(元素)
+
+
+#ch7 关联容器（associative containers）
+1. associative container. Such
+containers automatically arrange their elements into a sequence that depends on the values
+of the elements themselves, rather than the sequence in which we inserted them. Moreover,
+associative containers exploit this ordering to let us locate particular elements much more
+quickly than do the sequential containers, without our having to keep the container ordered by
+ourselves.
+	关联容器有自动排序功能，能够提供高效的 loop-up 操作。
+2. 关联容器通过 key(关键字) 进行高效的查找操作。
+3. 一般的关联数据结构使用 key-value pairs。
+4. When we put a particular key-value pair into the data structure, that key will
+continue to be associated with the same value until we delete the pair. Such a data structure
+is called an associative array(关联数组）。如 map 。
 
