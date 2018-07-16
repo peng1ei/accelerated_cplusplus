@@ -244,5 +244,69 @@ postfix), we call it a bidirectional iterator.
 	vector 和 string、sort函数支持 random-access iterators。但是 list 不支持，它只支持双向迭代器。
 
 
+#ch9 Defining new types
+1. C++支持2种数据类型
+- build-in
+- class types
 
+2. 在头文件中一般使用完全限定名（the fully qualified names），如 std::vector，std::string，而不使用using声明，
+如 using std::string 等。
+3. 在 member function 后面添加 const 关键字，表示该函数不改变该 object 的任何的 member data。
+const member function(const 成员函数）：Member functions that are const may not change the internal state of the object on
+which they are executing。
+
+4. cannot call non const functions on const objects。在const对象中不能调用非const函数。因为非const函数能够
+改变对象的内部状态，而 const对象 被保护，只允许访问，不允许修改内部状态。
+Only const member functions may be called for const objects.
+
+5. struct 成员默认是 public；class 成员默认是 private。
+6. Constructors（构造函数） are special member functions that define how objects are initialized.
+7. The constructor that takes no arguments is known as the default constructor（默认构造函数）。
+8. Between the : and the { is a sequence of
+constructor initializers（初始化列表）, which tell the compiler to initialize the given members with the
+values that appear between the corresponding parentheses.
+
+std::string、std::vector会自动初始化。所以如果类中有 std::string，std::vector，则可不必对这些成员进行初始化。
+
+9. When we create a new class object, several steps happen in sequence:
+- 1) The implementation allocates memory to hold the object.
+- 2) It initializes the object, as directed by the constructor's initializer list.
+- 3) It executes the constructor body.
+
+10. 重点理解以下这段话（关于构造函数初始化和赋值操作）：
+The implementation initializes every data member of every object, regardless of whether the
+constructor initializer list mentions those members. The constructor body may change these
+initial values subsequently, but the initialization happens before the constructor body begins
+execution. It is usually better to give a member an initial value explicitly, rather than assigning
+to it in the body of the constructor. By initializing rather than assigning a value, we avoid doing
+the same work twice.
+不管构造函数的初始化列表有没有显式的初始化数据成员，编译器都会将其数据成员进行初始化。初始化发生在构造函数的函数体
+执行之前，在构造函数的函数体的操作是赋值操作，我们应该显式的初始化我们的数据成员，即在初始化列表中进行初始化。
+
+初始化的一些规则：
+- If an object is of a class type that defines one or more constructors, then the
+appropriate constructor completely controls initialization of the objects of that class.
+- If an object is of built-in type, then value-initializing it sets it to zero, and default-
+initializing it gives it an undefined value.
+- Otherwise, the object can be only of a class type that does not define any
+constructors. In that case, value- or default-initializing the object value- or
+default-initializes each of its data members. This initialization process will be recursive
+if any of the data members is of a class type with its own constructor.
+
+We said that constructors exist to ensure that objects are created with their data members in a
+sensible state. In general, this design goal means that every constructor should initialize every
+data member. The need to give members a value is especially critical for members of built-in
+type. If the constructor fails to initialize such members, objects declared at local scope will be
+initialized with garbage, which is almost never correct.
+构造函数的存在就是为了确保数据成员有一个合理的值或状态。每一个构造函数应该初始化每一个数据成员，对于
+内置的类型来说，内置类型的初始化更为重要。
+
+Data members that are not explicitly initialized are implicitly initialized.
+未显式初始化的数据成员将被隐式初始化。
+
+The order in which members are initialized is determined by the order of declaration in the
+class, so care must be taken when using one class member to initialize another. It is safer
+practice to avoid such interdependence by assigning values to these members inside the
+constructor body and not initializing them in the constructor initializer.
+成员初始化的顺序由类中的声明顺序决定，因此在使用一个类成员初始化另一个成员时必须小心。 通过在构造函数体内为这些成员赋值并且不在构造函数初始值设定项中初始化它来避免这种相互依赖是更安全的做法。
 
