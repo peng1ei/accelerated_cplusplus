@@ -336,10 +336,82 @@ appends to the rest of the characters.
 	he variable and the literal are two distinct objects and, therefore, have different
 addresses.字符串常量和变量是两个不同的对象，各自有自己的地址。
 6. <cstring> --> strlen() 计算以 '\0' 结尾的字符串的长度，不包括 '\0' 字符。
-7. T* p = new T[n]; 
+7. T× p = new T[n]; 
 	vector<T> v(p, p + n);
 	delete[] p;
 
 
+#ch10 control copying/assigning/destorying class objects（重点理解构造函数和拷贝构造函数即赋值操作符）
+1. explicit 关键字
+	Now let's understand a bit about the use of explicit . This keyword makes sense only in the definition of a constructor that
+takes a single argument. When we say that a constructor is explicit, we're saying that the compiler will use the constructor
+only in contexts in which the user expressly invokes the constructor, and not otherwise:
+	Vec<int> vi(100); // ok, explicitly construct the Vec from an int
+	Vec<int> vi = 100; // error: implicitly construct the Vec (§11.3.3/199) and copy it to vi
+	现在让我们了解一下使用explicit。 此关键字仅在采用单个参数的构造函数的定义中才有意义。 当我们说构造函数是显式的时，我们说编译器将仅在用户明确调用构造函数的上下文中使用构造函数，否则：
+
+2. 两个相同类型的指针相减，返回这两个指针之间的元素的个数。
+
+3. 拷贝构造函数（copy constructor）
+Both explicit and implicit copies are controlled by a special constructor called the copy constructor.
+	vector<int> vi;
+	double d;
+	d = median(vi); // copy vi into the parameter in median
+
+	string line;
+	vector<string> words = split(line); // copy the return from split into words
+
+	vector<Student_info> vs;
+	vector<Student_info> v2 = vs; // copy vs into v2, explicit
+
+	隐式的发生 拷贝构造函数的情形：
+	- Passing an object by value to a function。
+	- returning an object by value from a function。
 
 
+	深拷贝：如果有指针，则会在拷贝的同时重新分配内存。
+	浅拷贝：仅仅拷贝数据，如果有指针，则两个对象指向同一块内存。
+
+4. this关键字
+The this keyword is valid only inside a member
+function, where it denotes a pointer to the object on which the member function is operation.
+
+5. When we use = to give an initial value to a variable, we are invoking the copy
+constructor. When we use it in an assignment expression, we're calling operator= . Class authors must be attuned to the
+difference in order to implement the right semantics.（ = 作为拷贝构造函数和 赋值操作符的区别 )
+
+6. 初始化发生在：
+- In variable declarations. 变量声明的时候
+- For function parameters on entry to a function。
+- For the return value of a function on return from the function
+- In constructor initializers。 在初始化列表中。
+7. 赋值运算发生在：
+Assignment happens only when using the = operator in an expression.
+8. rule of three: If your class needs a destructor, it probably needs a copy constructor and an
+assignment operator too.
+9. If we use new , it always initializes every element
+of a T array by using T::T() . new 会调用构造函数初始化新创建的对象。
+
+10. new 运算符为我们做了蛮多事，包括 申请内存和使用所分配类型的默认构造函数进行初始化
+The new operator does too much
+for our purposes: It both allocates and initializes memory. When used to allocate an array of
+type T , it needs the default constructor for T .
+
+If we use new , it always initializes every element of a T array by using T::T() .
+即 使用 new 分配内存时，它会做两件事，一件事就是分配内存，另一件事就是使用类型的默认构造函数对每一个元素进行初始化。
+
+一般使用 new 分配内存时，我们都会在分配内存后对每个元素进行初始化，而 new操作符又会进行初始化，这样的话，使用 new 运算符再加上
+后面的人工初始化，这样就对一个元素进行了2次初始化，开销是蛮大的。
+对于 STL 标准库中的容器，为了避免两次的初始化，一般都不使用 new 和 delete 来进行内存的管理，而是使用 标准库<memory> 中提供的
+allocator<T> 类来进行内存的管理。
+
+11. 更为灵活的内存管理策略：<memory> 中的 allocator<T> 类型：
+The <memory> header provides a class, called allocator<T> , that allocates a block of
+uninitialized memory that is intended to contain objects of type T, and returns a pointer to the
+initial element of that memory.
+
+The library alsoprovides a way to construct objects in that memory, and to destroy the objects again—all
+without deallocating the memory itself.It is up to the programmer using the allocator class to
+keep track of which space holds constructed objects and which space is still uninitialized.
+
+The construct and destroy members construct or destroy a single object（单个对象）in this uninitialized space.
