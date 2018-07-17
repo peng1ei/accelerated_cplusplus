@@ -310,3 +310,36 @@ practice to avoid such interdependence by assigning values to these members insi
 constructor body and not initializing them in the constructor initializer.
 成员初始化的顺序由类中的声明顺序决定，因此在使用一个类成员初始化另一个成员时必须小心。 通过在构造函数体内为这些成员赋值并且不在构造函数初始值设定项中初始化它来避免这种相互依赖是更安全的做法。
 
+
+#ch10 
+1. A pointer is a kind of random-access iterator that is essential for accessing elements of arrays, and has other uses as well.指针是一种随机访问迭代器，对于访问数组元素至关重要，并且还有其他用途。
+
+2. A pointer is a value that represents the address of an object. Every distinct object has a unique
+address, which denotes the part of the computer's memory that contains the object.
+
+3. 函数指针
+	int next(int n) { return n + 1; }
+	fp = &next 等价于 fp = next
+	i = (*fp)(i) 等价于 i = fp(i)
+
+	double analysis(const vector<Student_info> &);
+	double (*analysis)(const vector<Student_info> &); // analysis为函数指针
+	typedef double (*analysis_fp)(const vector<Student_info> &) // analysis_fp 为函数指针类型，可用它来定义函数指针变量，
+		如 analysis_fp fp; fp = analysis;
+
+	函数指针一般用来做函数的参数，用于实现回调；也可以用来做返回值，但是很少见。
+4. <cstddef> --> size_t类型、ptrdiff_t类型
+5. A string literal（字符串常量） is really an array of const char with one more element than the number of characters in
+the literal. That extra character is a null character (i.e., '\0' ) that the compiler automatically
+appends to the rest of the characters.
+	const char hello[] = { 'H', 'e', 'l', 'l', 'o', '\0' };
+	he variable and the literal are two distinct objects and, therefore, have different
+addresses.字符串常量和变量是两个不同的对象，各自有自己的地址。
+6. <cstring> --> strlen() 计算以 '\0' 结尾的字符串的长度，不包括 '\0' 字符。
+7. T* p = new T[n]; 
+	vector<T> v(p, p + n);
+	delete[] p;
+
+
+
+
